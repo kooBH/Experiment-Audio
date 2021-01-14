@@ -4,9 +4,8 @@
 #include <random>
 #include <string.h>
 
-#define DEVICE 3
-
-#define DEVICE_CLEAN 12
+#define DEVICE 17
+#define DEVICE_CLEAN 18
 #define DEVICE_NOISE 8
 
 #define NORM_MUL 32765
@@ -122,17 +121,16 @@ int main(int argc, char** argv) {
 
   /* Routine */
 
-  thread_record= new std::thread(&Recorder::Process,&recorder,argv[2],argv[3]);
+  thread_record= new std::thread(&Recorder::Process,&recorder,argv[2]);
 
   printf("NOTE::RECORDING STARTED\n");
   if(flag_noise)
     speaker_n.Start();
-  SLEEP(1000);
+//  SLEEP(500);
   // keyword
   speaker_c.FullBufLoad(buf_c,nRead_c/2);
-  SLEEP(500);
+  //SLEEP(500);
   speaker_c.Start();
-  printf("NOTE::1sec delayed\n");
   printf("NOTE::PLAYING SOUND\n");
   speaker_c.Wait();
   if(flag_noise)

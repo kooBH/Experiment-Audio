@@ -43,7 +43,7 @@ public:
   inline Recorder(std::string dir,std::string path,int channels,int device,int samplerate);
   inline ~Recorder();
   /* Process */
-  inline void Process(std::string,std::string);
+  inline void Process(std::string);
   inline void Stop();
 };
 
@@ -82,13 +82,13 @@ void Recorder::OpenDevice(int device_) {
   input= new RtInput(device,channels,samplerate,shift_size,frame_size,input_size);
 }
 
-void Recorder::Process(std::string file_raw, std::string file_1){
+void Recorder::Process(std::string output_path){
   flag_finish= false;
   flag_recording.store(true);
 
   input->Start();
 
-  output->NewFile(file_raw.c_str());
+  output->NewFile(output_path.c_str());
  // output_MLDR->NewFile(file_1.c_str());
 
   // resolve all left buffers
