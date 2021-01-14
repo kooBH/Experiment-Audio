@@ -1,0 +1,6 @@
+[submodule "lib/RtAudioWrapper"]
+	path = lib/RtAudioWrapper
+	url = https://github.com/koobh/RtAudioWrapper
+[submodule "lib/WAV"]
+	path = lib/WAV
+	url = https://github.com/koobh/WAV
