@@ -46,3 +46,4 @@ ChiME: /home/data/CHiME4_bth_5ch/  (real(x), simul(o))
 ismir04_genre: /home/data/DS20921/ismir04_genre/audio    
 genre당 5개만 모아놓은 ismir04_genre: /home/data/DS20921/ismir04_genre/CHOSEN_BY_SANGHOON   
 TIMIT: /home/data/DS20921/TIMIT/TIMIT/TEST/   
+CHiME: 2960개, ismir40_genre: 40개, TIMIT:1680개  
