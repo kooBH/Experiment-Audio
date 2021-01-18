@@ -33,12 +33,19 @@ arg : CHiME4, N1, N2
  
 ## NUM OF ISMIR04
 classical: 319
+
 electronic: 115
+
 jazz: 26
+
 metal: 29
+
 pop: 5
+
 punk: 16
+
 rock: 96
+
 world: 123 
 
 
