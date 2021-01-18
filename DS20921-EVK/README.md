@@ -43,6 +43,6 @@ world: 123
 
 ## Data path   
 ChiME: /home/data/CHiME4_bth_5ch/  (real(x), simul(o))   
-ismir04_genre: /home/data/DS20921/ismir04_genre    
+ismir04_genre: /home/data/DS20921/ismir04_genre/audio    
 genre당 5개만 모아놓은 ismir04_genre: /home/data/DS20921/ismir04_genre/CHOSEN_BY_SANGHOON   
-TIMIT: /home/data/DS20921/TIMIT   
+TIMIT: /home/data/DS20921/TIMIT/TIMIT/TEST/   
