@@ -22,16 +22,19 @@ sudo apt-get install libasound2-dev
 
 ## Power
 The supply of power must be stable.  
-If a speaker makes undesired noise or a recorded data seems weird, 
+If a speaker makes undesired noise or a recorded data seems weird,   
 make sure **every** power source is stable.   
 
-+ case 1
-recorded audio plot was unstable.
-![unstable_wav_plot]('doc/unstable_wav_plot.png')  
-changed the adaptor of the recorder from  12V 2.0A to 12V 3.5A  
++ case 1  
+recorded audio plot was unstable.  
+![unstable_wav_plot](doc/unstable_wav_plot.png)    
+Solved by Changing the adaptor of the recorder from  12V 2.0A to 12V 3.5A  
   
-+ case 2 
++ case 2   
 When a board was connected to PC, speakers made high-freq noises.  
-It was found out that a monitor adaptor was a problem.  
+It was found out that a monitor adaptor  which was not directly connected 
+to the board was a problem.  
   
-
++ case 3  
+If a speaker makes high-freq noise when connected to PC by analog jack and can't figure out what is a problem,  
+It is useful to use an audio interface.  
