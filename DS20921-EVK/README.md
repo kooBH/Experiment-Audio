@@ -13,3 +13,21 @@ For each senario noise must be choosen randomly.
 To perform experiments, the seed must be fixed for every experiment.   
 
 Going to use Studio capture audio iterface, so the output for the speaker will be 3-channel.    
+
+## TEMP
+ismir04_genre : 장르별로 최소 갯수 기준으로 가운데서 샘플링.     
+TIMIT : 짧으니까 concat해서 샘플링 (1초 이후)    
+1초 CHiME 1초   
+  
++ ismir04 only (2ch)    
+   
++ ismir04 1ch + TIMIT    
+  
++ TIMIT only (1ch * 2)      
+  
+SNR 0.0    
+  
+arg : CHiME4, N1, N2    
+
+2-point noise    
+ 
