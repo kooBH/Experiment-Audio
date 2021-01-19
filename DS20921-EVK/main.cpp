@@ -4,9 +4,9 @@
 #include <random>
 #include <string.h>
 
-#define DEVICE 17
-#define DEVICE_CLEAN 18
-#define DEVICE_NOISE 8
+#define DEVICE 3
+#define DEVICE_CLEAN 0
+#define DEVICE_NOISE 1
 
 #define NORM_MUL 32765
 
@@ -27,9 +27,9 @@ int main(int argc, char** argv) {
   //const double mul_noise = NORM_MUL / 3.1623;
   const double mul_noise = NORM_MUL;
 
-  double energy_clean=0,energy_noise=0;
-  double mean_energy_clean=0,mean_energy_noise=0;
-  double energy_normal=0;
+  double energy_clean=0,energy_noise_1=0,enery_noise_2=0;
+  double mean_energy_clean=0,mean_energy_noise_1=0,mean_energy_noise_2=0;
+  double energy_normal_1=0,energy_normal_2=0;
 
   short max_n=0,max_c=0;
 
@@ -42,8 +42,8 @@ int main(int argc, char** argv) {
 
   //dual recorder("dir","name",CHANNELS,DEVICE_MLDR,DEVICE_Conex,SAMPLERATE);
   Recorder recorder("dir","name",CHANNELS,DEVICE,SAMPLERATE);
-  RtOutput speaker_c(DEVICE_CLEAN,1,SAMPLERATE,16000,128,512);
-  RtOutput speaker_n(DEVICE_NOISE,2,SAMPLERATE,16000,128,512);
+  RtOutput speaker_c(DEVICE_CLEAN,1,SAMPLERATE,48000,128,512);
+  RtOutput speaker_n(DEVICE_NOISE,2,SAMPLERATE,48000,128,512);
 
   FILE *fp_c=nullptr,*fp_n=nullptr,*fp_a=nullptr;
   unsigned int nRead_c = 0,nRead_n = 0,nRead_a=0;
@@ -82,21 +82,29 @@ int main(int argc, char** argv) {
     buf_n =  new short[noise_length];
     fread(buf_n,sizeof(short),noise_length,fp_n);
     /* Normalize N */
+	/*
     for(int i=0;i<noise_length;i++)
       if(max_n < std::abs(buf_n[i]))
         max_n = abs(buf_n[i]);
+	*/
 
     /* E noise */
-    for(int i=0;i<noise_length;i++)
-      energy_noise += buf_n[i]*buf_n[i];
+    for(int i=0;i<noise_length/2;i++){
+      energy_noise_1 += buf_n[2*i]*buf_n[2*i];
+      energy_noise_2 += buf_n[2*i+1]*buf_n[2*i+1];
+	}
     mean_energy_noise = energy_noise/noise_length;
 
     /* SNR */
-    energy_normal = std::sqrt(mean_energy_clean)/std::sqrt(mean_energy_noise);
-    double SNRweight = energy_normal/(std::sqrt(std::pow(10,SNR/10)));
+    energy_normal_1 = std::sqrt(mean_energy_clean)/std::sqrt(mean_energy_noise_1);
+    energy_normal_2 = std::sqrt(mean_energy_clean)/std::sqrt(mean_energy_noise_2);
+    double SNRweight_1 = energy_normal_1/(std::sqrt(std::pow(10,SNR/10)));
+    double SNRweight_2 = energy_normal_2/(std::sqrt(std::pow(10,SNR/10)));
 
-    for(int i=0;i<noise_length;i++)
-      buf_n[i]*=SNRweight;
+    for(int i=0;i<noise_length/2;i++){
+      buf_n[2*i]*=SNRweight_1;
+      buf_n[2*i+1]*=SNRweight_2;
+	}
 
     speaker_n.FullBufLoad(buf_n,noise_length);
     printf("noisy speech loaded\n");

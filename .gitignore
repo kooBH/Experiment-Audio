@@ -16,3 +16,8 @@ _deps
 *.sln
 
 .vscode
+
+# Excutable
+AudioProbe
+DS20921
+MEMS

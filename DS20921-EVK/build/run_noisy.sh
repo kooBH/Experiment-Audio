@@ -2,10 +2,8 @@
 
 ### NOISY ###
 
-outpath_raw_MLDR=/home/data/noisy/raw_MLDR
-outpath_raw_Conex=/home/data/noisy/raw_Conexant
-outpath_MLDR=/home/data/noisy/MLDR
-outpath_Conexant=/home/data/noisy/Conexant
+outpath=/home/data/DS20921/output
+wav_root=/home/data/DS20921/data/
 
 arr_dir=("bus" "caf" "ped" "str")
 arr_noi=("BUS" "CAF" "PED" "STR")
@@ -18,14 +16,9 @@ for idx in 0 1 2 3 ; do
     dir="$(echo $i | cut -d'/' -f5)"
     #echo $dir
     for j in $(ls $i); do
-      input=$i'/'$j
-      mkdir -p $outpath_raw_MLDR'/'$dir
-      mkdir -p $outpath_raw_Conex'/'$dir
-      mkdir -p $outpath_MLDR'/'$dir
-      mkdir -p $outpath_Conexant'/'$dir
-      echo ./Dual $input $outpath_raw_MLDR'/'$dir'/'$j $outpath_MLDR'/'$dir'/'$j $outpath_raw_Conex'/'$dir'/'$j $outpath_Conexant'/'$dir'/'$j /home/data/CHiME4_Noise/longest/${arr_nos[$idx]}.wav
-      ./Dual $input $outpath_raw_MLDR'/'$dir'/'$j $outpath_MLDR'/'$dir'/'$j $outpath_raw_Conex'/'$dir'/'$j $outpath_Conexant'/'$dir'/'$j /home/data/CHiME4_Noise/longest/${arr_noi[$idx]}.wav
+      mkdir -p $outpath'/'$dir
+      echo ./DS20921 $wav_root'/'Clean'/'$j $outpath'/'$dir'/'$j $wav_root'/'Noise1'/'$j  
+      ./DS20921 $wav_root'/'Clean'/'$j $outpath'/'$dir'/'$j $wav_root'/'Noise12'/'$j  
     done
-    sleep 600
   done
 done

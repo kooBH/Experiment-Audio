@@ -58,14 +58,12 @@ Recorder::Recorder(std::string dir, std::string name, int channels_,int device,i
   /* General */
   flag_recording.store(false);
   flag_finish = false;
-
   lock = new std::unique_lock<std::mutex>(mtx);
 
   /* PROCESS */
   OpenDevice(device);
   output = new WAV(channels,samplerate);
   raw = new short[channels*shift_size];
-  
 }
 
 Recorder::~Recorder() {

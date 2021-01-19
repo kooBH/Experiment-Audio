@@ -22,7 +22,8 @@ list(APPEND INCL
 
 list(APPEND COMPILE_OPTION
   -fopenmp
-  -g
+  #-g
+  -O3
 )
 
 include(../lib/RtAudioWrapper/RtAudio.cmake)
