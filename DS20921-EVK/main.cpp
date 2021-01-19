@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
   //const double mul_noise = NORM_MUL / 3.1623;
   const double mul_noise = NORM_MUL;
 
-  double energy_clean=0,energy_noise_1=0,enery_noise_2=0;
+  double energy_clean=0,energy_noise_1=0,energy_noise_2=0;
   double mean_energy_clean=0,mean_energy_noise_1=0,mean_energy_noise_2=0;
   double energy_normal_1=0,energy_normal_2=0;
 
@@ -93,7 +93,8 @@ int main(int argc, char** argv) {
       energy_noise_1 += buf_n[2*i]*buf_n[2*i];
       energy_noise_2 += buf_n[2*i+1]*buf_n[2*i+1];
 	}
-    mean_energy_noise = energy_noise/noise_length;
+    mean_energy_noise_1 = energy_noise_1/(noise_length/2);
+    mean_energy_noise_2 = energy_noise_2/(noise_length/2);
 
     /* SNR */
     energy_normal_1 = std::sqrt(mean_energy_clean)/std::sqrt(mean_energy_noise_1);
