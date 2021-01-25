@@ -1,5 +1,22 @@
-#ifndef _H_TRIO_
-#define _H_TRIO_
+#ifndef _H_RECORDER_DS20921_FIRMWARE_
+#define _H_RECORDER_DS20921_FIRMWARE_
+
+/*
+OUTPUT SIGNAL
+6-channel 16kHz
+
+1ch - original left
+2ch - original right
+3ch - reference left
+4ch - reference right
+5ch - mixed original mic
+6ch - processed output
+
+OUTPUT FILES
+raw : 2ch original signal
+ref : 2ch reference signal
+out : 1ch processed signal
+*/
 
 /* General */
 #include <condition_variable>
@@ -24,14 +41,20 @@ private:
 
   /* Process */
   short* raw; 
+  short* buf_original, *buf_reference,*buf_processed; 
 
   // fundamental parameters
   int input_size;
   int device,channels,samplerate,shift_size,frame_size;
   RtAudio audio;
 
+  std::string dir;
+  std::string name;
+
   RtInput *input;
-  WAV* output;
+  WAV* original;
+  WAV* reference;
+  WAV* processed;
   char file_name[64];
 
   bool flag_finish;
@@ -43,11 +66,13 @@ public:
   inline Recorder(std::string dir,std::string path,int channels,int device,int samplerate);
   inline ~Recorder();
   /* Process */
-  inline void Process(std::string);
+  inline void Process();
   inline void Stop();
 };
 
-Recorder::Recorder(std::string dir, std::string name, int channels_,int device,int samplerate_){
+Recorder::Recorder(std::string dir_, std::string name_, int channels_,int device,int samplerate_){
+  dir = dir_;
+  name = name_;
   channels = channels_;
   samplerate = samplerate_;
   input_size = 2048;
@@ -62,8 +87,13 @@ Recorder::Recorder(std::string dir, std::string name, int channels_,int device,i
 
   /* PROCESS */
   OpenDevice(device);
-  output = new WAV(channels,samplerate);
+  original = new WAV(2,samplerate);
+  refernce = new WAV(2,samplerate);
+  processed = new WAV(1,samplerate);
   raw = new short[channels*shift_size];
+  buf_original = new short[2*shift_size];
+  buf_reference= new short[2*shift_size];
+  buf_processed= new short[shift_size];
 }
 
 Recorder::~Recorder() {
@@ -71,7 +101,9 @@ Recorder::~Recorder() {
   /* Process */
   delete[] raw;
   delete input;
-  delete output;
+  delete original;
+  delete reference;
+  delete processed;
 }
 
 
@@ -80,14 +112,19 @@ void Recorder::OpenDevice(int device_) {
   input= new RtInput(device,channels,samplerate,shift_size,frame_size,input_size);
 }
 
-void Recorder::Process(std::string output_path){
+void Recorder::Process(){
   flag_finish= false;
   flag_recording.store(true);
 
   input->Start();
 
-  output->NewFile(output_path.c_str());
- // output_MLDR->NewFile(file_1.c_str());
+  std::string original_path  = dir + '/original/'+name;
+  std::string reference_path = dir + '/reference/'+name;
+  std::string processed_path = dir + '/processed/'+name;
+
+  original->NewFile(original_path.c_str());
+  reference->NewFile(reference_path.c_str());
+  processed->NewFile(processed_path.c_str());
 
   // resolve all left buffers
   while(flag_recording.load() || input->data.stock.load() > shift_size){
@@ -95,27 +132,27 @@ void Recorder::Process(std::string output_path){
     if (input->data.stock.load() > shift_size) {
       input->GetBuffer(raw);
 
-      /*
-      #pragma omp parallel for
-        for(int j=0;j<shift_size;j++)
-          for(int i=0;i<channels;i++)
-            raw_in[i][j]*=2;
-      */
+     for(int i =0; i<shift_size*channels;i+=channels){
+       int j = i/channels;
+       buf_original[2*j] = raw[i];
+       buf_original[2*j+1] = raw[i+1];
+       buf_reference[2*j] = raw[i+2];
+       buf_reference[2*j+1] = raw[i+3];
+       buf_processed[j] = raw[i+5];
+     }
 
-     // stft->stft(raw_in, ddd);
-     // mldr->Process(ddd);
-     // stft->istftSingle(ddd, enhanced_MLDR);
-
-      output->Append(raw,shift_size*channels);
-     // output_MLDR->Append(enhanced_MLDR,shift_size);
-     
+      original->Append(buf_original,2*shift_size);
+      reference->Append(buf_reference,2*shift_size);
+      processed->Append(buf_processed,1*shift_size);
       // not  enough buffer
     }else {
       SLEEP(10);
     }
   }
   input->Stop();
-  output->Finish();
+  original->Finish();
+  reference->Finish();
+  processed->Finish();
   flag_finish = true;
 }
 

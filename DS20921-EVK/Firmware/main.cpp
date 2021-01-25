@@ -10,7 +10,7 @@
 
 #define NORM_MUL 32765
 
-#define CHANNELS 2
+#define CHANNELS 6
 #define SAMPLERATE 16000
 
 #define SNR 5.0
@@ -35,13 +35,11 @@ int main(int argc, char** argv) {
 
 
   bool flag_noise=false;
-  // clean : input.wav output.wav
-  // noisy : input.wav output.wav noise.wav
-  if(argc > 3)
-    flag_noise = true;
 
-  //dual recorder("dir","name",CHANNELS,DEVICE_MLDR,DEVICE_Conex,SAMPLERATE);
-  Recorder recorder("dir","name",CHANNELS,DEVICE,SAMPLERATE);
+  flag_noise = true;
+
+  /* Recorder(<root_dir>,<file_name>)*/
+  Recorder recorder(argv[3],argv[4],CHANNELS,DEVICE,SAMPLERATE);
   RtOutput speaker_c(DEVICE_CLEAN,1,SAMPLERATE,48000,128,512);
   RtOutput speaker_n(DEVICE_NOISE,2,SAMPLERATE,48000,128,512);
 
@@ -73,7 +71,7 @@ int main(int argc, char** argv) {
   mean_energy_clean = energy_clean/(nRead_c/2);
 
   if(flag_noise){
-    fp_n = fopen(argv[3],"rb");
+    fp_n = fopen(argv[2],"rb");
     fseek(fp_n, 0L, SEEK_END);
     nRead_n= ftell(fp_n)-44;  // 44 : WAV format head size
     fseek(fp_n, 44, SEEK_SET);
@@ -116,7 +114,7 @@ int main(int argc, char** argv) {
 
   /* Routine */
   speaker_c.FullBufLoad(buf_c, nRead_c / 2);
-  thread_record= new std::thread(&Recorder::Process,&recorder,argv[2]);
+  thread_record= new std::thread(&Recorder::Process);
 
   printf("NOTE::RECORDING STARTED\n");
   if(flag_noise)

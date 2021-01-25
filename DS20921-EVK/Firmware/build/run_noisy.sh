@@ -16,9 +16,11 @@ for idx in 0 1 2 3 ; do
     dir="$(echo $i | cut -d'/' -f5)"
     #echo $dir
     for j in $(ls $i); do
-      mkdir -p $outpath'/'$dir
-      echo ./DS20921 $wav_root'/'Clean'/'$j $outpath'/'$dir'/'$j $wav_root'/'Noise1'/'$j  
-      ./DS20921 $wav_root'/'Clean'/'$j $outpath'/'$dir'/'$j $wav_root'/'Noise12'/'$j  
+      mkdir -p $outpath'/original/'$dir
+      mkdir -p $outpath'/reference/'$dir
+      mkdir -p $outpath'/processed/'$dir
+      echo ./DS20921 $wav_root'/'Clean'/'$j $wav_root'/'Noise1'/'$j  $outpath $dir'/'$j
+      ./DS20921 $wav_root'/'Clean'/'$j $wav_root'/'Noise1'/'$j  $outpath $dir'/'$j
     done
   done
 done
