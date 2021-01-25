@@ -1,7 +1,7 @@
 # DS20921-EVK    
 firmware changed.   
 
-![DS20921](./doc/DS20921-PID.ping)
+![DS20921](doc/DS20921-PID.png)
 
 ## OUTPUT SIGNAL  
 6-channel
