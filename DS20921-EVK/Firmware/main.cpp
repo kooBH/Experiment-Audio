@@ -4,16 +4,16 @@
 #include <random>
 #include <string.h>
 
-#define DEVICE 3
-#define DEVICE_CLEAN 0
-#define DEVICE_NOISE 1
+#define DEVICE 19
+#define DEVICE_CLEAN 20
+#define DEVICE_NOISE 3
 
 #define NORM_MUL 32765
 
 #define CHANNELS 2
 #define SAMPLERATE 16000
 
-#define SNR 0.0
+#define SNR 5.0
 
 
 void AudioProbe();
