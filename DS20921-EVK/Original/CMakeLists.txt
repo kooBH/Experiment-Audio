@@ -15,9 +15,9 @@ endif()
 
 list(APPEND INCL
 	.
-	../lib
-	../lib/RtAudioWrapper
-	../lib/WAV
+	../../lib
+	../../lib/RtAudioWrapper
+	../../lib/WAV
 )
 
 list(APPEND COMPILE_OPTION
@@ -26,10 +26,10 @@ list(APPEND COMPILE_OPTION
   -O3
 )
 
-include(../lib/RtAudioWrapper/RtAudio.cmake)
-include(../lib/RtAudioWrapper/Libsamplerate.cmake)
+include(../../lib/RtAudioWrapper/RtAudio.cmake)
+include(../../lib/RtAudioWrapper/Libsamplerate.cmake)
 
-include(../cmake/AudioProbe.cmake)
+include(../../cmake/AudioProbe.cmake)
 
 add_executable(${PROJECT_NAME} main.cpp ${SRC})
 target_include_directories(${PROJECT_NAME} PRIVATE	${INCL}  )
