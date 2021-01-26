@@ -34,9 +34,7 @@ int main(int argc, char** argv) {
   short max_n=0,max_c=0;
 
 
-  bool flag_noise=false;
-
-  flag_noise = true;
+  bool flag_noise=true;
 
   /* Recorder(<root_dir>,<file_name>)*/
   Recorder recorder(argv[3],argv[4],CHANNELS,DEVICE,SAMPLERATE);
@@ -114,7 +112,7 @@ int main(int argc, char** argv) {
 
   /* Routine */
   speaker_c.FullBufLoad(buf_c, nRead_c / 2);
-  thread_record= new std::thread(&Recorder::Process);
+  thread_record= new std::thread(&Recorder::Process,&recorder);
 
   printf("NOTE::RECORDING STARTED\n");
   if(flag_noise)

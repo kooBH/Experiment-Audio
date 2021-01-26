@@ -2,7 +2,7 @@
 
 ### NOISY ###
 
-outpath=/home/data/DS20921/output
+outpath=/home/data/DS20921/DS20921_firmware/
 wav_root=/home/data/DS20921/data/
 
 arr_dir=("bus" "caf" "ped" "str")
@@ -19,8 +19,9 @@ for idx in 0 1 2 3 ; do
       mkdir -p $outpath'/original/'$dir
       mkdir -p $outpath'/reference/'$dir
       mkdir -p $outpath'/processed/'$dir
+      mkdir -p $outpath'/output/'$dir
       echo ./DS20921 $wav_root'/'Clean'/'$j $wav_root'/'Noise1'/'$j  $outpath $dir'/'$j
-      ./DS20921 $wav_root'/'Clean'/'$j $wav_root'/'Noise1'/'$j  $outpath $dir'/'$j
+      ./DS20921 $wav_root'/'Clean'/'$j $wav_root'/'Noise12'/'$j  $outpath $dir'/'$j
     done
   done
 done

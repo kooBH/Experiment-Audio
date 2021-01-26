@@ -21,3 +21,6 @@ _deps
 AudioProbe
 DS20921
 MEMS
+
+# temp
+*.swp

@@ -52,6 +52,7 @@ private:
   std::string name;
 
   RtInput *input;
+  WAV* output;
   WAV* original;
   WAV* reference;
   WAV* processed;
@@ -87,8 +88,9 @@ Recorder::Recorder(std::string dir_, std::string name_, int channels_,int device
 
   /* PROCESS */
   OpenDevice(device);
+  output = new WAV(channels,samplerate);
   original = new WAV(2,samplerate);
-  refernce = new WAV(2,samplerate);
+  reference = new WAV(2,samplerate);
   processed = new WAV(1,samplerate);
   raw = new short[channels*shift_size];
   buf_original = new short[2*shift_size];
@@ -118,10 +120,12 @@ void Recorder::Process(){
 
   input->Start();
 
-  std::string original_path  = dir + '/original/'+name;
-  std::string reference_path = dir + '/reference/'+name;
-  std::string processed_path = dir + '/processed/'+name;
+  std::string original_path  = dir + "/original/"+name;
+  std::string reference_path = dir + "/reference/"+name;
+  std::string processed_path = dir + "/processed/"+name;
+  std::string output_path = dir + "/output/"+name;
 
+  output->NewFile(output_path.c_str());
   original->NewFile(original_path.c_str());
   reference->NewFile(reference_path.c_str());
   processed->NewFile(processed_path.c_str());
@@ -134,6 +138,7 @@ void Recorder::Process(){
 
      for(int i =0; i<shift_size*channels;i+=channels){
        int j = i/channels;
+//	   printf("%d %d\n",i,j);
        buf_original[2*j] = raw[i];
        buf_original[2*j+1] = raw[i+1];
        buf_reference[2*j] = raw[i+2];
@@ -141,6 +146,7 @@ void Recorder::Process(){
        buf_processed[j] = raw[i+5];
      }
 
+      output->Append(raw,channels*shift_size);
       original->Append(buf_original,2*shift_size);
       reference->Append(buf_reference,2*shift_size);
       processed->Append(buf_processed,1*shift_size);
@@ -149,7 +155,10 @@ void Recorder::Process(){
       SLEEP(10);
     }
   }
+  
   input->Stop();
+
+  output->Finish();
   original->Finish();
   reference->Finish();
   processed->Finish();
