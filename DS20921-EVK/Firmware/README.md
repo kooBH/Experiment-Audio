@@ -20,5 +20,5 @@ ref : 2ch reference signal
 out : 1ch processed signal    
  
 # NOTE  
-After firmare update(PID-1494), 
-still, Original output can be acquired from PID-1498  
++ After firmare update(PID-1494), still, Original output can be acquired from PID-1498    
++ DS20924's PID is also 1494.  
