@@ -11,6 +11,12 @@ git submodule init
 git submodule update
 ```
 
+## Usage   
+Use ```AudioProbe``` to get device info.  
+Set parameters in ```main.cpp```.  
+Build.  
+Run script.  
+
 ## Dependency
 
 + ubuntu
