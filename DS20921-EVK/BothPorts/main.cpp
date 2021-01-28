@@ -5,10 +5,9 @@
 #include <math.h>
 #include <string.h>
 
-#define DEVICE_LEFT 19
-#define DEVICE_RIGHT 19
-#define DEVICE_CLEAN 20
-#define DEVICE_NOISE 3
+#define DEVICE_LEFT 18
+#define DEVICE_RIGHT 17
+#define DEVICE_SPEAKER 19
 
 #define CHANNEL_LEFT 2
 #define CHANNEL_RIGHT 6
@@ -17,6 +16,7 @@
 #define NORM_MUL 32765
 #define SNR 5.0
 
+#define CHANNEL_SPEAKER 3
 
 void AudioProbe();
 
@@ -40,13 +40,13 @@ int main(int argc, char** argv) {
   /* Recorder(<root_dir>,<file_name>)*/
   RecorderCX20921 recorder_left(argv[3],argv[4],CHANNEL_LEFT,DEVICE_LEFT,SAMPLERATE);
   RecorderCX20921FW recorder_right(argv[3],argv[4],CHANNEL_RIGHT,DEVICE_RIGHT,SAMPLERATE);
-  RtOutput speaker_c(DEVICE_CLEAN,1,SAMPLERATE,48000,128,512);
-  RtOutput speaker_n(DEVICE_NOISE,2,SAMPLERATE,48000,128,512);
+  RtOutput speaker(DEVICE_SPEAKER,CHANNEL_SPEAKER,SAMPLERATE,48000,128,512);
 
   FILE *fp_c=nullptr,*fp_n=nullptr,*fp_a=nullptr;
   unsigned int nRead_c = 0,nRead_n = 0,nRead_a=0;
-  unsigned int noise_start;
-  short *buf_c=nullptr,*buf_n=nullptr,*buf_a;
+  unsigned int noise_start,noise_length;
+  short *buf_c=nullptr,*buf_n=nullptr;
+  short *buf_s=nullptr;
 
   printf("Clean speech loaded\n");
 
@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
     fseek(fp_n, 0L, SEEK_END);
     nRead_n= ftell(fp_n)-44;  // 44 : WAV format head size
     fseek(fp_n, 44, SEEK_SET);
-    int noise_length = nRead_n / 2 ;
+    noise_length = nRead_n / 2 ;
     
     buf_n =  new short[noise_length];
     fread(buf_n,sizeof(short),noise_length,fp_n);
@@ -105,7 +105,15 @@ int main(int argc, char** argv) {
       buf_n[2*i+1]*=SNRweight_2;
 	}
 
-    speaker_n.FullBufLoad(buf_n,noise_length);
+	/* Clipping Check*/
+	/*
+	for(int i=0;i<noise_length;i++){
+		if(std::abs(buf_n[i])>32000)
+			printf("%d %d\n",i,buf_n[i]);
+	}
+	*/
+
+    //speaker_n.FullBufLoad(buf_n,noise_length);
     printf("noisy speech loaded\n");
   }
 
@@ -114,18 +122,32 @@ int main(int argc, char** argv) {
   printf("NOTE::INITALIZED\n");
 
   /* Routine */
-  speaker_c.FullBufLoad(buf_c, nRead_c / 2);
+  //speaker_c.FullBufLoad(buf_c, nRead_c / 2);
+  int max_len = (noise_length/2 > nRead_c/2)? noise_length/2 : nRead_c/2;
+
+  buf_s = new short[max_len*CHANNEL_SPEAKER];
+  memset(buf_s,0,sizeof(short)*max_len*CHANNEL_SPEAKER);
+
+  for(int i=0;i<nRead_c/2;i++){
+    //buf_s[CHANNEL_SPEAKER*i] = buf_c[i];
+    buf_s[CHANNEL_SPEAKER*i] = buf_c[i];
+  }
+  for(int i=0;i<noise_length/2;i++){
+    buf_s[CHANNEL_SPEAKER*i+1] =buf_n[2*i];
+    buf_s[CHANNEL_SPEAKER*i+2]=buf_n[2*i+1];
+    //buf_s[CHANNEL_SPEAKER*i+2]=buf_n[2*i];
+    //buf_s[CHANNEL_SPEAKER*i+3]=buf_n[2*i+1];
+  }
+
+  speaker.FullBufLoad(buf_s, max_len*CHANNEL_SPEAKER);
+
   thread_record_left= new std::thread(&RecorderCX20921::Process,&recorder_left);
   thread_record_right= new std::thread(&RecorderCX20921FW::Process,&recorder_right);
 
   printf("NOTE::RECORDING STARTED\n");
-  if(flag_noise)
-    speaker_n.Start();
-  speaker_c.Start();
+  speaker.Start();
   printf("NOTE::PLAYING SOUND\n");
-  speaker_c.Wait();
-  if(flag_noise)
-    speaker_n.Wait();
+  speaker.Wait();
 
   printf("STOP RECORDING\n");
   recorder_left.Stop();

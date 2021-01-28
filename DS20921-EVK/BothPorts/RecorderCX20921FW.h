@@ -125,10 +125,10 @@ void RecorderCX20921FW::Process(){
   std::string processed_path = dir + "/processed/"+name;
   std::string output_path = dir + "/output/"+name;
 
-  output->NewFile(output_path.c_str());
+  //output->NewFile(output_path.c_str());
   original->NewFile(original_path.c_str());
-  reference->NewFile(reference_path.c_str());
-  processed->NewFile(processed_path.c_str());
+  //reference->NewFile(reference_path.c_str());
+  //processed->NewFile(processed_path.c_str());
 
   // resolve all left buffers
   while(flag_recording.load() || input->data.stock.load() > shift_size){
@@ -141,15 +141,12 @@ void RecorderCX20921FW::Process(){
 //	   printf("%d %d\n",i,j);
        buf_original[2*j] = raw[i];
        buf_original[2*j+1] = raw[i+1];
-       buf_reference[2*j] = raw[i+2];
-       buf_reference[2*j+1] = raw[i+3];
-       buf_processed[j] = raw[i+5];
+       //buf_reference[2*j] = raw[i+2];
+       //buf_reference[2*j+1] = raw[i+3];
+       //buf_processed[j] = raw[i+5];
      }
 
-      output->Append(raw,channels*shift_size);
       original->Append(buf_original,2*shift_size);
-      reference->Append(buf_reference,2*shift_size);
-      processed->Append(buf_processed,1*shift_size);
       // not  enough buffer
     }else {
       SLEEP(10);
@@ -158,10 +155,7 @@ void RecorderCX20921FW::Process(){
   
   input->Stop();
 
-  output->Finish();
   original->Finish();
-  reference->Finish();
-  processed->Finish();
   flag_finish = true;
 }
 
