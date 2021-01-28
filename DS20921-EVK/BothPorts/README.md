@@ -4,6 +4,11 @@ firmware changed by right port.
 
 ![DS20921](../Firmware/doc/DS20921-PID.png)
 
+## Speaker  
+3ch : 1ch : speech    
+      2ch : noise 1  
+      3ch : noise 2  
+
 ## OUTPUT SIGNAL  
 
 + right port  
@@ -21,5 +26,5 @@ firmware changed by right port.
 2-channel    
 16kHz     
   
-1ch - processed output type-1  
-2ch - processed output type-2  
+1ch - mixed original mic    
+2ch - processed output  
