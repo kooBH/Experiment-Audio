@@ -1,6 +1,6 @@
 # CMAKE version of Ubuntu 16.04 is 3.5.
 cmake_minimum_required(VERSION 3.5)
-project(MEMS)
+project(DS20921)
 
 set(LINKLIBS)
 set(COMPILE_OPTION)
@@ -15,20 +15,21 @@ endif()
 
 list(APPEND INCL
 	.
-	../lib
-	../lib/RtAudioWrapper
-	../lib/WAV
+	../../lib
+	../../lib/RtAudioWrapper
+	../../lib/WAV
 )
 
 list(APPEND COMPILE_OPTION
   -fopenmp
-  -g
+  #-g
+  -O3
 )
 
-include(../lib/RtAudioWrapper/RtAudio.cmake)
-include(../lib/RtAudioWrapper/Libsamplerate.cmake)
+include(../../lib/RtAudioWrapper/RtAudio.cmake)
+include(../../lib/RtAudioWrapper/Libsamplerate.cmake)
 
-include(../cmake/AudioProbe.cmake)
+include(../../cmake/AudioProbe.cmake)
 
 add_executable(${PROJECT_NAME} main.cpp ${SRC})
 target_include_directories(${PROJECT_NAME} PRIVATE	${INCL}  )

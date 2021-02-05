@@ -4,9 +4,9 @@
 #include <random>
 #include <string.h>
 
-#define DEVICE 17
-#define DEVICE_CLEAN 18
-#define DEVICE_NOISE 8
+#define DEVICE 19
+#define DEVICE_CLEAN 20
+#define DEVICE_NOISE 17
 
 #define NORM_MUL 32765
 

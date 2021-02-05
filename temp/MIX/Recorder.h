@@ -5,7 +5,6 @@
 #include <condition_variable>
 #include <mutex>
 #include <atomic>
-#include <thread>
 
 /* Process */
 #include "RtInput.h"
@@ -21,6 +20,9 @@ private:
   std::condition_variable cv;
   std::mutex mtx;
   std::unique_lock<std::mutex> *lock;
+
+  std::string dir;
+  std::string name;
 
   /* Process */
   short* raw; 
@@ -43,29 +45,30 @@ public:
   inline Recorder(std::string dir,std::string path,int channels,int device,int samplerate);
   inline ~Recorder();
   /* Process */
-  inline void Process(std::string);
+  inline void Process();
   inline void Stop();
 };
 
-Recorder::Recorder(std::string dir, std::string name, int channels_,int device,int samplerate_){
+Recorder::Recorder(std::string dir_, std::string name_, int channels_,int device,int samplerate_){
   channels = channels_;
   samplerate = samplerate_;
   input_size = 2048;
   shift_size = 128;
   frame_size = 512;
 
+  dir = dir_;
+  name = name_;
+
 
   /* General */
   flag_recording.store(false);
   flag_finish = false;
-
   lock = new std::unique_lock<std::mutex>(mtx);
 
   /* PROCESS */
   OpenDevice(device);
   output = new WAV(channels,samplerate);
   raw = new short[channels*shift_size];
-  
 }
 
 Recorder::~Recorder() {
@@ -82,13 +85,15 @@ void Recorder::OpenDevice(int device_) {
   input= new RtInput(device,channels,samplerate,shift_size,frame_size,input_size);
 }
 
-void Recorder::Process(std::string output_path){
+void Recorder::Process(){
   flag_finish= false;
   flag_recording.store(true);
 
   input->Start();
+  
+  std::string path = dir + "/MEMS/"+name;
 
-  output->NewFile(output_path.c_str());
+  output->NewFile(path.c_str());
  // output_MLDR->NewFile(file_1.c_str());
 
   // resolve all left buffers

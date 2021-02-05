@@ -23,9 +23,11 @@ for idx in 0 1 2 3 ; do
       mkdir -p $outpath_raw_Conex'/'$dir
       mkdir -p $outpath_MLDR'/'$dir
       mkdir -p $outpath_Conexant'/'$dir
-      echo ./Dual $input $outpath_raw_MLDR'/'$dir'/'$j $outpath_MLDR'/'$dir'/'$j $outpath_raw_Conex'/'$dir'/'$j $outpath_Conexant'/'$dir'/'$j /home/data/CHiME4_Noise/longest/${arr_nos[$idx]}.wav
-      ./MEMS $input $outpath_raw_MLDR'/'$dir'/'$j $outpath_MLDR'/'$dir'/'$j $outpath_raw_Conex'/'$dir'/'$j $outpath_Conexant'/'$dir'/'$j /home/data/CHiME4_Noise/longest/${arr_noi[$idx]}.wav
+      echo ./Dual $input $outpath_raw_MLDR'/'$dir'/'$j $outpath_MLDR'/'$dir'/'$j $outpath_raw_Conex'/'$dir'/'$j $outpath_Conexant'/'$dir'/'$j /home/data/CHiME4_Noise/longest/${arr_noi[$idx]}.wav
+      ./Dual $input $outpath_raw_MLDR'/'$dir'/'$j $outpath_MLDR'/'$dir'/'$j $outpath_raw_Conex'/'$dir'/'$j $outpath_Conexant'/'$dir'/'$j /home/data/CHiME4_Noise/longest/${arr_noi[$idx]}.wav
+      break
     done
-    sleep 600
+    break
   done
 done
+

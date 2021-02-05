@@ -95,19 +95,7 @@ void Recorder::Process(std::string output_path){
     if (input->data.stock.load() > shift_size) {
       input->GetBuffer(raw);
 
-      /*
-      #pragma omp parallel for
-        for(int j=0;j<shift_size;j++)
-          for(int i=0;i<channels;i++)
-            raw_in[i][j]*=2;
-      */
-
-     // stft->stft(raw_in, ddd);
-     // mldr->Process(ddd);
-     // stft->istftSingle(ddd, enhanced_MLDR);
-
       output->Append(raw,shift_size*channels);
-     // output_MLDR->Append(enhanced_MLDR,shift_size);
      
       // not  enough buffer
     }else {
