@@ -115,7 +115,9 @@ int main(int argc, char** argv) {
 	 /* Noise Random Sampling */	
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	gen.seed(1);
+
+	// Fix seed
+	gen.seed(nRead_c);
 
 	std::uniform_int_distribution<int> rand_noise(0,nRead_n/2 - noise_length			);
 
@@ -123,6 +125,14 @@ int main(int argc, char** argv) {
 
 	// random sampling 
 	fseek(fp_n,noise_start,SEEK_SET);
+	/*
+	printf("nRead_n      : %d\n",nRead_n);
+	printf("nRead_c      : %d\n",nRead_c);
+	printf("nRead_a      : %d\n",nRead_a);
+	printf("padding      : %d\n",int(SAMPLERATE*NOISE_PAD));
+	printf("noise_length : %d\n",noise_length);
+	printf("noise_start  : %d\n",noise_start);
+	*/
 
 	/* Cal Energy */
 	  for(int i=0; i <nRead_c/2; i++)
