@@ -9,12 +9,12 @@
 #define DEVICE_2 19
 #define DEVICE_3 20
 
-#define DEVICE_CLEAN 21
-#define DEVICE_NOISE 17
+#define DEVICE_CLEAN 17
+#define DEVICE_NOISE 21
 
 #define NORM_MUL 32767
 
-#define CHANNELS_1 15
+#define CHANNELS_1 16
 #define CHANNELS_2 2
 #define CHANNELS_3 2
 
@@ -106,8 +106,6 @@ int main(int argc, char** argv) {
   if(flag_noise){
 	fp_n = fopen(argv[7],"rb");
 
-	printf("A\n");
-
 	/* Set Noise Length */
     fseek(fp_n, 0L, SEEK_END);
     nRead_n= ftell(fp_n)-44;  // 44 : WAV format head size
@@ -117,11 +115,14 @@ int main(int argc, char** argv) {
 	 /* Noise Random Sampling */	
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	gen.seed(10);
+	gen.seed(1);
 
 	std::uniform_int_distribution<int> rand_noise(0,nRead_n/2 - noise_length			);
 
 	int noise_start = rand_noise(gen)*2; // 2btyes sample 
+
+	// random sampling 
+	fseek(fp_n,noise_start,SEEK_SET);
 
 	/* Cal Energy */
 	  for(int i=0; i <nRead_c/2; i++)
