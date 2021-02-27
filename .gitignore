@@ -24,3 +24,6 @@ MEMS
 
 # temp
 *.swp
+
+# executable
+*.out

@@ -2,10 +2,11 @@
 
 ### NOISY ###
 
-outpath_root=/home/data/20210204
-outpath_device_1=/home/data/20210204/AKG
-outpath_device_2=/home/data/20210204/KETI
-outpath_device_3=/home/data/20210204/MEMS
+outpath_root=/home/data/20210205
+outpath_device_1=/home/data/20210205/DMEMS
+outpath_device_2=/home/data/20210205/KETI_L
+outpath_device_3=/home/data/20210205/KETI_R
+outpath_device_4=/home/data/20210205/DS20924FW
 
 arr_dir=("bus" "caf" "ped" "str")
 arr_noi=("BUS" "CAF" "PED" "STR")
@@ -21,8 +22,9 @@ for idx in 0 1 2 3 ; do
       mkdir -p $outpath_device_1'/'$dir
       mkdir -p $outpath_device_2'/'$dir
       mkdir -p $outpath_device_3'/'$dir
-      echo ./20210204 $outpath_root $dir'/'$j AKG KETI MEMS $input
-      ./20210204 $outpath_root $dir'/'$j AKG KETI MEMS $input
+      mkdir -p $outpath_device_4'/'$dir
+	  echo ./20210205 $outpath_root $dir'/'$j KETI_R DMEMS KETI_L DS20924FW $input
+	  ./20210205 $outpath_root $dir'/'$j KETI_R DMEMS KETI_L DS20924FW $input
     done
   done
 done

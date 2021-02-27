@@ -1,20 +1,24 @@
 #include "RtOutput.h"
 #include "Recorder.h"
+#include "DS20924FW.h"
 
 #include <random>
 #include <string.h>
 
-#define DEVICE_1 17
-#define DEVICE_2 18
-#define DEVICE_3 19
+#define DEVICE_1 18
+#define DEVICE_2 19
+#define DEVICE_3 20
+#define DEVICE_4 21
 #define DEVICE_CLEAN 17
 
 #define NORM_MUL 32765
 
-#define CHANNELS_1 1
-#define CHANNELS_2 13
-#define CHANNELS_3 4
+#define CHANNELS_1 13
+#define CHANNELS_2 8
+#define CHANNELS_3 13
+#define CHANNELS_4 2
 #define SAMPLERATE 16000
+#define SAMPLERATE_2 48000
 
 #define SNR 5.0
 
@@ -22,6 +26,7 @@
 void AudioProbe();
 
 int main(int argc, char** argv) {
+  printf("********************\n");
 
   /* Init */
   const double eps = 1e-16;
@@ -39,13 +44,14 @@ int main(int argc, char** argv) {
 
   bool flag_noise=false;
 
-  if(argc > 7)
+  if(argc > 8)
 	  flag_noise=true;
 
   /* Recorder(<root_dir>,<file_name>)*/
-  Recorder recorder_1(argv[1],argv[3],argv[2],CHANNELS_1,DEVICE_1,48000);
+  Recorder recorder_1(argv[1],argv[3],argv[2],CHANNELS_1,DEVICE_1,SAMPLERATE);
   Recorder recorder_2(argv[1],argv[4],argv[2],CHANNELS_2,DEVICE_2,SAMPLERATE);
   Recorder recorder_3(argv[1],argv[5],argv[2],CHANNELS_3,DEVICE_3,SAMPLERATE);
+  DS20924FW recorder_4(argv[1],argv[6],argv[2],CHANNELS_4,DEVICE_4,SAMPLERATE_2);
   RtOutput speaker_c(DEVICE_CLEAN,1,SAMPLERATE,48000,128,512);
   RtOutput speaker_n(0,1,SAMPLERATE,48000,128,512);
 
@@ -54,9 +60,9 @@ int main(int argc, char** argv) {
   unsigned int noise_start;
   short *buf_c=nullptr,*buf_n=nullptr,*buf_a;
 
-  printf("Clean speech loaded\n");
 
-  fp_c = fopen(argv[6], "rb");
+  fp_c = fopen(argv[7], "rb");
+
 
   fseek(fp_c, 0L, SEEK_END);
   nRead_c= ftell(fp_c)-44;  // 44 : WAV format head size
@@ -71,13 +77,15 @@ int main(int argc, char** argv) {
   for(int i=0;i<nRead_c/2;i++)
    buf_c[i] = (short)( ((double)(buf_c[i])/(max_c+eps))*NORM_MUL);
 
-  /* Cal Energy */
-  for(int i=0;i<nRead_c/2;i++)
-    energy_clean += buf_c[i]*buf_c[i];
-  mean_energy_clean = energy_clean/(nRead_c/2);
+  printf("Clean speech loaded\n");
 
   if(flag_noise){
-    fp_n = fopen(argv[7],"rb");
+	  /* Cal Energy */
+	  for(int i=0;i<nRead_c/2;i++)
+		  energy_clean += buf_c[i]*buf_c[i];
+	  mean_energy_clean = energy_clean/(nRead_c/2);
+
+	  fp_n = fopen(argv[8],"rb");
     fseek(fp_n, 0L, SEEK_END);
     nRead_n= ftell(fp_n)-44;  // 44 : WAV format head size
     fseek(fp_n, 44, SEEK_SET);
@@ -118,6 +126,7 @@ int main(int argc, char** argv) {
   std::thread *thread_record_1;
   std::thread *thread_record_2;
   std::thread *thread_record_3;
+  std::thread *thread_record_4;
   printf("NOTE::INITALIZED\n");
 
   /* Routine */
@@ -125,6 +134,7 @@ int main(int argc, char** argv) {
   thread_record_1= new std::thread(&Recorder::Process,&recorder_1);
   thread_record_2= new std::thread(&Recorder::Process,&recorder_2);
   thread_record_3= new std::thread(&Recorder::Process,&recorder_3);
+  thread_record_4= new std::thread(&DS20924FW::Process,&recorder_4);
 
   printf("NOTE::RECORDING STARTED\n");
   if(flag_noise)
@@ -135,10 +145,14 @@ int main(int argc, char** argv) {
   if(flag_noise)
     speaker_n.Wait();
 
+  // 1sec delay
+  SLEEP(1000);
+
   printf("STOP RECORDING\n");
   recorder_1.Stop();
   recorder_2.Stop();
   recorder_3.Stop();
+  recorder_4.Stop();
 
   delete[] buf_c;
   if(buf_n) delete[] buf_n;

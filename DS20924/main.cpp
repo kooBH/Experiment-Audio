@@ -5,12 +5,12 @@
 #include <random>
 #include <string.h>
 
-#define DEVICE_1 18
-#define DEVICE_2 19
-#define DEVICE_3 20
+#define DEVICE_1 22
+#define DEVICE_2 3
+#define DEVICE_3 21
 
-#define DEVICE_CLEAN 17
-#define DEVICE_NOISE 21
+#define DEVICE_CLEAN 2
+#define DEVICE_NOISE 0
 
 #define NORM_MUL 32767
 
@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
   short max_n=0,max_c=0,max_a=0;
 
 
-  bool flag_noise=true;
+  bool flag_noise=false;
 
   /* Recorder(<root_dir>,<file_name>)*/
   Recorder recorder_MEMS(argv[1],argv[3],argv[2],CHANNELS_1,DEVICE_1,SAMPLERATE);

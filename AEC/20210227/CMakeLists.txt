@@ -1,6 +1,6 @@
 # CMAKE version of Ubuntu 16.04 is 3.5.
 cmake_minimum_required(VERSION 3.5)
-project(20210205)
+project(DS20921)
 
 set(LINKLIBS)
 set(COMPILE_OPTION)
@@ -22,7 +22,8 @@ list(APPEND INCL
 
 list(APPEND COMPILE_OPTION
   -fopenmp
-  -g
+  #-g
+  -O3
 )
 
 include(../../lib/RtAudioWrapper/RtAudio.cmake)

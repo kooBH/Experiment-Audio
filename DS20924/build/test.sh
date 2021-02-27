@@ -28,12 +28,11 @@ for idx in 2 0 1 3; do
 
       echo ./DS20924.out $output_root $dir'/'$j MEMS DS20924 DS20924FW  $input /home/data/CHiME4_Noise/longest/${arr_noi[$idx]}.wav
       ./DS20924.out $output_root $dir'/'$j MEMS DS20924 DS20924FW  $input /home/data/CHiME4_Noise/longest/${arr_noi[$idx]}.wav
-
 	break
-
     done
 	break
   done
+ # break
 done
 
-# done
+#done

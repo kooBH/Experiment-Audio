@@ -4,16 +4,18 @@
 #include <random>
 #include <string.h>
 
-#define DEVICE_MEMS 0
-#define DEVICE_921 20
-#define DEVICE_CLEAN 21
-#define DEVICE_NOISE 1
+#define DEVICE_MEMS 19
+#define DEVICE_921 19
+#define DEVICE_924 19
+
+#define DEVICE_CLEAN 20
+#define DEVICE_NOISE 3
 
 #define NORM_MUL 32765
 
 #define CHANNELS_MEMS 16
 #define CHANNELS_921 2
-
+#define CHANNELS_924 2
 #define SAMPLERATE 16000
 
 #define SNR 5.0
@@ -37,11 +39,13 @@ int main(int argc, char** argv) {
   short max_n=0,max_c=0;
 
 
-  bool flag_noise=true;
+  bool  flag_noise = true;
 
   //dual recorder("dir","name",CHANNELS,DEVICE_MLDR,DEVICE_Conex,SAMPLERATE);
-  Recorder recorder_MEMS("dir","name",CHANNELS_MEMS,DEVICE_MEMS,SAMPLERATE);
-  Recorder recorder_921("dir","name",CHANNELS_921,DEVICE_921,SAMPLERATE);
+  Recorder recorder_MEMS(argv[3],argv[6],argv[7],CHANNELS_MEMS,DEVICE_MEMS,SAMPLERATE);
+  Recorder recorder_921(argv[5],argv[6],argv[7],CHANNELS_921,DEVICE_921,SAMPLERATE);
+  Recorder recorder_924(argv[6],argv[6],argv[7],CHANNELS_924,DEVICE_924,SAMPLERATE);
+
   RtOutput speaker_c(DEVICE_CLEAN,1,SAMPLERATE,48000,128,512);
   RtOutput speaker_n(DEVICE_NOISE,2,SAMPLERATE,48000,128,512);
 
@@ -60,12 +64,6 @@ int main(int argc, char** argv) {
 
   buf_c =  new short[nRead_c/2];
   fread(buf_c,sizeof(short),nRead_c/2,fp_c);
-  /* Normalize C */
-  for(int i=0;i<nRead_c/2;i++)
-    if(max_c < std::abs(buf_c[i]))
-      max_c = abs(buf_c[i]);
-  for(int i=0;i<nRead_c/2;i++)
-   buf_c[i] = (short)( ((double)(buf_c[i])/(max_c+eps))*NORM_MUL);
 
   /* Cal Energy */
   for(int i=0;i<nRead_c/2;i++)
@@ -111,14 +109,16 @@ int main(int argc, char** argv) {
     printf("noisy speech loaded\n");
   }
 
-  std::thread *thread_record_1;
-  std::thread *thread_record_2;
+  std::thread *thread_record_MEMS;
+  std::thread *thread_record_921;
+  std::thread *thread_record_924;
   printf("NOTE::INITALIZED\n");
 
   /* Routine */
   speaker_c.FullBufLoad(buf_c, nRead_c / 2);
-  thread_record_1= new std::thread(&Recorder::Process,&recorder_MEMS,argv[3]);
-  thread_record_2= new std::thread(&Recorder::Process,&recorder_921,argv[4]);
+  thread_record_MEMS = new std::thread(&Recorder::Process,&recorder_MEMS);
+  thread_record_921 = new std::thread(&Recorder::Process,&recorder_921);
+  thread_record_924 = new std::thread(&Recorder::Process,&recorder_924);
 
   printf("NOTE::RECORDING STARTED\n");
   if(flag_noise)
@@ -132,6 +132,7 @@ int main(int argc, char** argv) {
   printf("STOP RECORDING\n");
   recorder_MEMS.Stop();
   recorder_921.Stop();
+  recorder_924.Stop();
 
   delete[] buf_c;
   if(buf_n) delete[] buf_n;
