@@ -1,5 +1,9 @@
 # Experiment-Audio
 
+## NOTE  
+Make sure every connection is rigid.   
+Make sure power source is stable.  
+
 ## Clone
 Need to clone submodules.  
 ```
@@ -43,4 +47,4 @@ to the board was a problem.
   
 + case 3  
 If a speaker makes high-freq noise when connected to PC by analog jack and can't figure out what is a problem,  
-It is useful to use an audio interface.  
+It is useful to use an audio interface.   
