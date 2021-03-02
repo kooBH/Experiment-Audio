@@ -24,7 +24,9 @@ MEMS
 
 # temp
 *.swp
+log
 
 # executable
 *.out
 RUN
+RECORD

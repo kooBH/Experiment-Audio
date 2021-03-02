@@ -4,12 +4,12 @@
 #include <random>
 #include <string.h>
 
-#define DEVICE_MEMS 19
-#define DEVICE_921 19
-#define DEVICE_924 19
+#define DEVICE_MEMS 17
+#define DEVICE_921 21
+#define DEVICE_924 22
 
-#define DEVICE_CLEAN 20
-#define DEVICE_NOISE 3
+#define DEVICE_CLEAN 19
+#define DEVICE_NOISE 18
 
 #define NORM_MUL 32765
 
@@ -19,6 +19,10 @@
 #define SAMPLERATE 16000
 
 #define SNR 5.0
+
+
+bool quiet = false;
+double quiet_scale = 0.1;
 
 
 void AudioProbe();
@@ -43,8 +47,8 @@ int main(int argc, char** argv) {
 
   //dual recorder("dir","name",CHANNELS,DEVICE_MLDR,DEVICE_Conex,SAMPLERATE);
   Recorder recorder_MEMS(argv[3],argv[6],argv[7],CHANNELS_MEMS,DEVICE_MEMS,SAMPLERATE);
-  Recorder recorder_921(argv[5],argv[6],argv[7],CHANNELS_921,DEVICE_921,SAMPLERATE);
-  Recorder recorder_924(argv[6],argv[6],argv[7],CHANNELS_924,DEVICE_924,SAMPLERATE);
+  Recorder recorder_921(argv[4],argv[6],argv[7],CHANNELS_921,DEVICE_921,SAMPLERATE);
+  Recorder recorder_924(argv[5],argv[6],argv[7],CHANNELS_924,DEVICE_924,SAMPLERATE);
 
   RtOutput speaker_c(DEVICE_CLEAN,1,SAMPLERATE,48000,128,512);
   RtOutput speaker_n(DEVICE_NOISE,2,SAMPLERATE,48000,128,512);
@@ -104,10 +108,15 @@ int main(int argc, char** argv) {
       buf_n[2*i]*=SNRweight_1;
       buf_n[2*i+1]*=SNRweight_2;
 	}
-
+	if(quiet)
+		for(int i;i<noise_length;i++)
+			buf_n[i] *=quiet_scale;
     speaker_n.FullBufLoad(buf_n,noise_length);
     printf("noisy speech loaded\n");
   }
+  if(quiet)
+	for(int i;i<nRead_c/2;i++)
+		buf_c[i] *=quiet_scale;
 
   std::thread *thread_record_MEMS;
   std::thread *thread_record_921;

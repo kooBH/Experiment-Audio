@@ -1,6 +1,6 @@
 # CMAKE version of Ubuntu 16.04 is 3.5.
 cmake_minimum_required(VERSION 3.5)
-project(DS20921)
+project(RECORD)
 
 set(LINKLIBS)
 set(COMPILE_OPTION)
