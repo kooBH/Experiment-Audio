@@ -48,3 +48,15 @@ to the board was a problem.
 + case 3  
 If a speaker makes high-freq noise when connected to PC by analog jack and can't figure out what is a problem,  
 It is useful to use an audio interface.   
+
+## Board  
+
++ DS20924    
+sometimes, recording process does not stop for long times(6 seconds recording became 50 minutes recording)  
+
++ DS20924 with firmware changed  
+sometimes, rocorded audio is broken. specific frequency interval is repeated. It is hard to detect when you just listen. If you check spectrogram, you will notice the problem immediately.    
+  
++ DS20921  
+
++ DS20921 with firmware changed  
