@@ -186,6 +186,10 @@ int main(int argc, char** argv) {
   if(flag_noise)
     speaker_n.Wait();
   // 1sec delay
+  //
+
+  if(!flag_noise)
+	SLEEP(NOISE_PAD*1000);
 
   printf("STOP RECORDING\n");
   recorder_MEMS.Stop();
