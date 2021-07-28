@@ -4,15 +4,15 @@
 #include <random>
 #include <string.h>
 
-#define DEVICE_1 20 // MEMS
-#define DEVICE_2 2  // DS20924
+#define DEVICE_1 2 // MEMS
+#define DEVICE_2 20  // DS20924
 
 #define DEVICE_CLEAN 21
 #define DEVICE_NOISE 0
 
 #define NORM_MUL 32767
 
-#define CHANNELS_1 16
+#define CHANNELS_1 12
 #define CHANNELS_2 2
 
 #define SAMPLERATE 16000
@@ -21,7 +21,6 @@
 #define NOISE_PAD 1.0
 
 #define SNR 0.0
-
 
 void AudioProbe();
 
@@ -49,7 +48,6 @@ int main(int argc, char** argv) {
   double energy_normal_1=0,energy_normal_2=0;
 
   short max_n=0,max_c=0,max_a=0;
-
 
   bool flag_noise=true;
 
@@ -185,9 +183,8 @@ int main(int argc, char** argv) {
   speaker_c.Wait();
   if(flag_noise)
     speaker_n.Wait();
-  // 1sec delay
-  //
 
+  // 1-sec delay
   if(!flag_noise)
 	SLEEP(NOISE_PAD*1000);
 
