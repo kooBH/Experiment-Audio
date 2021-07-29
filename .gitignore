@@ -26,7 +26,23 @@ MEMS
 *.swp
 log
 
+# data
+*.wav
+
 # executable
 *.out
 RUN
 RECORD
+
+# Visual Stduio
+*.vs
+*.vcxproj
+*.filters
+*.sln
+*.dir
+RelWithDebInfo
+Release
+Debug
+x64
+*.user
+*.exe
