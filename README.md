@@ -58,5 +58,9 @@ sometimes, recording process does not stop for long times(6 seconds recording be
 sometimes, rocorded audio is broken. specific frequency interval is repeated. It is hard to detect when you just listen. If you check spectrogram, you will notice the problem immediately.    
   
 + DS20921  
+  1. The device freezes, "Alexa" indicater LED in on constantly.  
+  2. Input from the device is 0
+![DS20921_broken_input](doc/DS20921_broken_input.png)
+  3. Input from the device is broken. Spectrogram of it show horizontal lines.  
 
 + DS20921 with firmware changed  
