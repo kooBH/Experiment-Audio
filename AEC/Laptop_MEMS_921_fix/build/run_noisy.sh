@@ -2,9 +2,9 @@
 
 ### NOISY ###
 
-outpath=/home/mini/data/recording/20210909_AEC_MEMS_921/
+outpath=/home/mini/data/recording/20210916_AEC_MEMS_921/
 #wav_root=/home/data/DS20921/data/
-wav_root=/home/mini/data/AEC/
+wav_root=/home/mini/data/AEC/longer_noise/
 
 arr_dir=("bus" "caf" "ped" "str")
 arr_noi=("BUS" "CAF" "PED" "STR")
@@ -24,7 +24,7 @@ TARGET=Noise1
 #while :
 #do
 
-#sleep 30
+sleep 30
 
 for idx in 0 1 2 3 ; do
   # for  et,dt 
@@ -40,7 +40,7 @@ for idx in 0 1 2 3 ; do
       echo ./RECORD $wav_root'/'Clean'/'$j  $wav_root'/'${TARGET}'/'$j   $dir $j $outpath'/'MEMS $outpath'/'DS20921
 		./RECORD $wav_root'/'Clean'/'$j  $wav_root'/'${TARGET}'/'$j   $dir $j $outpath'/'MEMS $outpath'/'DS20921
 		cp $wav_root'/'${TARGET}'/'$j $outpath'/'reference'/'$dir'/'$j
-    break
+#    break
 	 done
 
 
@@ -50,7 +50,9 @@ for idx in 0 1 2 3 ; do
 #		./RECORD $wav_root'/'Clean'/'$fn  $wav_root'/'${TARGET}'/'$fn   $dir $fn $outpath'/'MEMS $outpath'/'DS20921
 #		cp $wav_root'/'${TARGET}'/'$fn $outpath'/'reference'/'$dir'/'$fn
 #	done
+#break
   done
+ #break
 done
 
 #done

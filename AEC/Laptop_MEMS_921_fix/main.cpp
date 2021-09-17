@@ -4,10 +4,10 @@
 #include <random>
 #include <string.h>
 
-#define DEVICE_MEMS 12
-#define DEVICE_921 0     // I2S RX 16K TX 48K
+#define DEVICE_MEMS 17
+#define DEVICE_921 16     // I2S RX 16K TX 48K
 
-#define DEVICE_OUTPUT 1
+#define DEVICE_STUIDO 15
 
 #define NORM_MUL 32765
 
@@ -18,6 +18,8 @@
 
 bool quiet = false;
 double quiet_scale = 0.1;
+
+double scale = 0.7;
 
 
 void AudioProbe();
@@ -41,7 +43,7 @@ int main(int argc, char** argv) {
   Recorder recorder_921(argv[6],argv[3],argv[4],CHANNELS_921,DEVICE_921,SAMPLERATE);
 
 
-  RtOutput speaker(DEVICE_OUTPUT,2+1,SAMPLERATE,48000,128,512);
+  RtOutput speaker(DEVICE_STUDIO,2+1,SAMPLERATE,48000,128,512);
 
   FILE *fp_c=nullptr,*fp_n=nullptr,*fp_a=nullptr;
   unsigned int nRead_c = 0,nRead_n = 0,nRead_a=0;
@@ -97,9 +99,9 @@ int main(int argc, char** argv) {
 
 	// Merge Noise + Clean
 	for(int i=0;i<nRead_c/2;i++){
-		buf_o[3*i]   = buf_n[2*i];
-		buf_o[3*i+1] = buf_n[2*i+1];
-		buf_o[3*i+2] = buf_c[i];
+		buf_o[3*i]   = short(buf_n[2*i]*scale);
+		buf_o[3*i+1] = short(buf_n[2*i+1]*scale);
+		buf_o[3*i+2] = short(buf_c[i]*scale);
 	}
 
   }
@@ -118,6 +120,9 @@ int main(int argc, char** argv) {
 
   thread_record_MEMS = new std::thread(&Recorder::Process,&recorder_MEMS);
   thread_record_921 = new std::thread(&Recorder::Process,&recorder_921);
+
+  // 0.5 sec sleep
+  SLEEP(500);
 
   printf("NOTE::RECORDING STARTED\n");
   speaker.Start();

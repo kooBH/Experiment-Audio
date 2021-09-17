@@ -24,9 +24,9 @@ TARGET=Noise1
 #while :
 #do
 
-#sleep 30
+sleep 30
 
-for idx in 0 1 2 3 ; do
+for idx in 1 2 3 0 ; do
   # for  et,dt 
   for i in /home/mini/data/CHiME4_bth_5ch/*${arr_dir[$idx]}_simu; do
   #for i in /home/data/CHiME4_bth_5ch/dt05_${arr_dir[$idx]}_simu; do
