@@ -1,1 +1,1 @@
-python synthesize.py --ismir '/home/data/DS20921/ismir04_genre/CHOSEN_BY_SANGHOON/' --TIMIT '/home/data/DS20921/TIMIT/TIMIT/TEST/' --CHiME '/home/data/CHiME4_bth_5ch/' --output_path '/home/data/AEC/'
+python synthesize.py --ismir '/home/mini/data/ismir04_genre/uniformly_sampled_audio/' --TIMIT '/home/mini/data/TIMIT/TIMIT/TEST/' --CHiME '/home/mini/data/CHiME4_bth_5ch/' --noise '/home/mini/data/CHiME4_noise/'  --output_path '/home/mini/data/AEC/set3/'
