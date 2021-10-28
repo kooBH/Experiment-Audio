@@ -148,7 +148,7 @@ int main(int argc, char** argv) {
   printf("NOTE::INITALIZED\n");
 
   /* Routine */
-  speaker.FullBufLoad(buf_o, (nRead_c/2) *3);
+  speaker.FullBufLoad(buf_o, (nRead_c/2) *4);
 
 
   thread_record_MEMS = new std::thread(&Recorder::Process,&recorder_MEMS);

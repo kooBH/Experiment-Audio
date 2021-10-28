@@ -11,6 +11,8 @@ input="target_list.txt"
 
 while IFS= read -r line
 do
+ # while :
+ #  do
     dir=$(echo $line| cut -d'/' -f1)
     file=$(echo $line| cut -d'/' -f2)
 
@@ -25,5 +27,9 @@ do
 	./RECORD $wav_root'/'Clean'/'$file  $wav_root'/'${TARGET}'/'$file $wav_root'/'CHiME'/'$file   $dir $file $outpath'/'MEMS $outpath'/'DS20921 $outpath'/'dump
 	cp $wav_root'/'${TARGET}'/'$file $outpath'/'reference'/'$dir'/'$file
 
+#  done
+
     # echo $dir/$file
 done < "$input"
+
+

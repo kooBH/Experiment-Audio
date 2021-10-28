@@ -21,7 +21,7 @@
 bool quiet = false;
 double quiet_scale = 0.1;
 
-double scale = 0.7;
+double scale = 0.8;
 
 
 void AudioProbe();
@@ -117,8 +117,8 @@ int main(int argc, char** argv) {
   for(int i=0;i<noise_length1;i++){
     buf_n1[i] = short((buf_n1[i]/(double)max_n1)*32767);
   }
-  for(int i=0;i<noise_length1;i++){
-    buf_n1[i] = short((buf_n1[i]/(double)max_n2)*32767);
+  for(int i=0;i<noise_length2;i++){
+    buf_n2[i] = short((buf_n2[i]/(double)max_n2)*32767);
   }
 
   // Merge Noise + Clean
@@ -135,7 +135,7 @@ int main(int argc, char** argv) {
   printf("NOTE::INITALIZED\n");
 
   /* Routine */
-  speaker.FullBufLoad(buf_o, (nRead_c/2) *4);
+  speaker.FullBufLoad(buf_o, (nRead_c/2) + noise_length1 + noise_length2);
 
   thread_record_MEMS = new std::thread(&Recorder::Process,&recorder_MEMS);
   thread_record_921 = new std::thread(&Recorder::Process,&recorder_921);

@@ -2,9 +2,9 @@
 
 ### NOISY ###
 
-outpath=/home/data/AEC/20210305_AEC/
+outpath=/home/data/AEC/20210810_AEC_MEMS_921/
 #wav_root=/home/data/DS20921/data/
-wav_root=/home/data/AEC/
+wav_root=/media/kiosk/IIP/Experiment-Audio/
 
 arr_dir=("bus" "caf" "ped" "str")
 arr_noi=("BUS" "CAF" "PED" "STR")

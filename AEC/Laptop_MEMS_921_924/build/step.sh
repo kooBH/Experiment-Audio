@@ -7,7 +7,7 @@ TARGET=ismir
 
 input="target_list.txt"
 
-#sleep 30
+sleep 30
 
 while IFS= read -r line
 do
@@ -22,9 +22,12 @@ do
 
 
 	echo ./RECORD $wav_root'/'Clean'/'$file  $wav_root'/'${TARGET}'/'$file $wav_root'/'CHiME'/'$file  $dir $file $outpath'/'MEMS $outpath'/'DS20921 $outpath'/'DS20924 $outpath'/'dump
-
+#while :
+#do
 	./RECORD $wav_root'/'Clean'/'$file  $wav_root'/'${TARGET}'/'$file $wav_root'/'CHiME'/'$file  $dir $file $outpath'/'MEMS $outpath'/'DS20921 $outpath'/'DS20924 $outpath'/'dump
 	cp $wav_root'/'${TARGET}'/'$file $outpath'/'reference'/'$dir'/'$file
+#done
+#break
 
     # echo $dir/$file
 done < "$input"
