@@ -7,8 +7,6 @@ TARGET=ismir
 
 input="target_list.txt"
 
-sleep 7
-
 while IFS= read -r line
 do
 #  while :
