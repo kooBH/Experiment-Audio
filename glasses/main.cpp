@@ -4,8 +4,8 @@
 #include <random>
 #include <string.h>
 
-#define DEVICE_1 9
-#define DEVICE_CLEAN 0
+#define DEVICE_1 4
+#define DEVICE_CLEAN 3
 
 
 
