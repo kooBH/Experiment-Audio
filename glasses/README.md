@@ -1,7 +1,19 @@
-# 안경형 MEMS 어레이
+# 안경형 MEMS 어레이  
+  
+  
+https://kli.korean.go.kr/corpus/main/requestMain.do  
+서울말 낭독체 발화 말뭉치  
 
 2024.02.23  
 안경형 마이크 어레이의 소자 성능 측정 실험.  
+
+## 
+```Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))```
+
+
+```choco install ffmpeg```
+
+## Run
 
 + Windows 환경 가정
 
