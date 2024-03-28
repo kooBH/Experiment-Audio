@@ -20,7 +20,7 @@ if __name__ == '__main__' :
     dir_GT = args.dir_GT
     
     #dir_GT = "label_t_s"
-    whisper_size = "base"
+    whisper_size = "large"
     
     list_data = glob.glob(os.path.join(dir_input,"*.wav"))    
     
@@ -35,8 +35,8 @@ if __name__ == '__main__' :
         dir_input = dir_input[:-1]    
     nameout = os.path.basename(dir_input)
     print(nameout)    
-    with open(os.path.join(dir_log,nameout+".csv"),"w") as f_out :
-        f_out.write("Index, Filename, CER\n")
+    with open(os.path.join(dir_log,nameout+".csv"),"w", encoding='UTF-8-sig') as f_out :
+        f_out.write("Index, Filename, CER, estim, GT\n")
     
         for idx,path in tqdm(enumerate(list_data),total=len(list_data)):
             # path : fv01_t01_s01.wav
@@ -49,19 +49,24 @@ if __name__ == '__main__' :
             label_name = tokens[1] + "_" + tokens[2] + ".txt"
             path_label = os.path.join(dir_GT,label_name)
             
-            with open(path_label,encoding='UTF8') as f_gt:
+            with open(path_label,encoding='UTF-8-sig') as f_gt:
                 gt = f_gt.readlines()[0]
             
-            result = model.transcribe(path)
+            # condition_on_previous_text
+            result = model.transcribe(path,
+            temperature=0,
+            condition_on_previous_text=False
+            )
             
             CER = metric.CharacterErrorRate()
             dist,length = CER.metric(gt, result["text"])
             cer = dist/length
             
-            f_out.write("{},{},{}\n".format(idx,file_name, cer))
+            f_out.write("{},{},{},{},{}\n".format(idx,file_name, cer,result["text"],gt))
             total_cer += cer
-    
+
         final_cer = total_cer / len(list_data)
         
         f_out.write("-1,AVG,{}".format(final_cer))
+    print("CER : ", final_cer)
     
