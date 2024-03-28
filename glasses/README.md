@@ -10,8 +10,17 @@ https://kli.korean.go.kr/corpus/main/requestMain.do
 ## 
 ```Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))```
 
-
 ```choco install ffmpeg```
+
+Whisper는 내부에 확률 모델 사용.  결과를 고정 시키기 위해서는
+
+```python
+model.transcribe(path,
+            temperature=0,
+            condition_on_previous_text=False
+            )
+```
+사용.
 
 ## Run
 
