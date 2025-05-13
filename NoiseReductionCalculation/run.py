@@ -58,7 +58,7 @@ def close_stream(stream):
     stream.close()
 
 if __name__ == "__main__" : 
-    play_librispeech = False
+    play_librispeech = True
 
     if play_librispeech :
         dir_input = "G:/test-clean" # .flac
@@ -67,7 +67,7 @@ if __name__ == "__main__" :
         dir_input = "G:/KsponSpeech_eval_clean_wav_4sec" # .wav
         format = "wav"
 
-    list_play = glob.glob(os.path.join(dir_input,f"*.{format}"))
+    list_play = glob.glob(os.path.join(dir_input,"**",f"*.{format}"),recursive=True)
 
     p = pyaudio.PyAudio()
 
